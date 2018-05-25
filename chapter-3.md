@@ -110,13 +110,13 @@ Here's the `hashCode` contract:
 
 A good hash function tends to produce unequal hash codes for unequal instances. Ideally, a hash function should distribute any reasonable collection of unequal instances uniformly across all int values. Achieving this ideal can be difficult. Luckily it’s not too hard to achieve a fair approximation. Here is a simple recipe:
 
-1. Declare an int variable named result, and initialize it to the hash code c for the first significant field in your object, as computed in step 2.1. (Recall from Item 10 that a significant field is a field that affects equals comparisons.) Exclude any field that are not used in `equals` comparisons.
+1. Declare an int variable named result, and initialize it to the hash code c for the first significant field in your object, as computed in step 2.i. (Recall from Item 10 that a significant field is a field that affects equals comparisons.) Exclude any field that are not used in `equals` comparisons.
 2. For every remaining significant field f in your object, do the following: 
     1. Compute an int hash code `c` for the field:
         1. If the field is of a primitive type, compute `Type.hashCode(f)`, where `Type` is the boxed primitive class corresponding to f’s type.
         2. If the field is an object reference and this class’s `equals` method compares the field by recursively invoking `equals`, recursively invoke `hashCode` on the field. If a more complex comparison is required, compute a “canonical representation” for this field and invoke `hashCode` on the canonical representation. If the value of the field is null, use 0 (or some other constant, but 0 is traditional).
-        3. If the field is an array, treat it as if each significant element were a separate field. That is, compute a hash code for each significant element by applying these rules recursively, and combine the values per step 2.2. If the array has no significant elements, use a constant, preferably not `0`. If all elements are significant, use `Arrays.hashCode`.
-    2. Combine the hash code `c` computed in step 2.a into result as follows: `result = 31 * result + c;`. 
+        3. If the field is an array, treat it as if each significant element were a separate field. That is, compute a hash code for each significant element by applying these rules recursively, and combine the values per step 2.ii. If the array has no significant elements, use a constant, preferably not `0`. If all elements are significant, use `Arrays.hashCode`.
+    2. Combine the hash code `c` computed in step 2.i into result as follows: `result = 31 * result + c;`. 
         1. This makes it so that `result` depends on the order of the fields, yielding a much better hash function if the class has multiple similar fields. If the multiplication is omitted, all anagrams would have identical hash codes.
         2. The value 31 was chosen because it is an odd prime. If it were even and the multiplication overflowed, information would be lost, because multiplication by 2 is equivalent to shifting. The advantage of using a prime is less clear, but it is traditional. A nice property of 31 is that the multiplication can be replaced by a shift and a subtraction for better performance on some architectures: 31 * i == (i << 5) - i. Modern VMs do this sort of optimization automatically.
 3. Return `result`.
