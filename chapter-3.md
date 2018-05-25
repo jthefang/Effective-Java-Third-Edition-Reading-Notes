@@ -152,9 +152,30 @@ private int hashCode; // Automatically initialized to 0
 ```
 
 ## Item 12: Always override toString
-Whether or not you specify the format, provide programmatic access to all of the information contained in the value returned by `toString`. For example, the `PhoneNumber` class should contain accessors for the area code, prefix, and line number. If you fail to do this, you force programmers who need this information to parse the string. Besides reducing performance and making unnecessary work for programmers, this process is error-prone and results in fragile systems that break if you change the format. By failing to provide accessors, you turn the string format into a de facto API, even if you’ve specified that it’s subject to change.
+Default `Object toString` method: class name followed by an @ sign and the unsigned hexadecimal representation of the hash code, e.g. PhoneNumber@163b91.
+
+__Providing a good toString implementation makes your class
+much more pleasant to use and makes systems using the class easier to debug__. The toString method is automatically invoked when an object is passed to println, printf, the string concatenation operator, or assert, or is printed by a debugger. Even if you never call toString on an object, others may. For example, a component that has a reference to your object may include the string representation of the object in a logged error message. If you fail to override toString, the message may be useless.
+
+__When practical, the toString method should return all of the interesting information contained in the object__. Else you could get test failure reports like: `Assertion failure: expected {abc, 123}, but was {abc, 123}`. Well, shit.
+
+__Provide programmatic access to the information contained in the value returned by toString__, i.e. via getters (and possibly setters).
+
+To recap, override Object’s toString implementation in every instantiable class you write, unless a superclass has already done so. It makes classes much more pleasant to use and aids in debugging. The toString method should return a concise, useful description of the object, in an aesthetically pleasing format.
+
 
 ## Item 13: Override clone judiciously
+The `Cloneable` interface was intended as a mixin interface (Item 20) for classes to advertise that they permit cloning. Unfortunately, it fails to serve this purpose. It lacks a `clone` method, and Object’s `clone` method is protected (accessible only to class, package, and subclasses).
+
+- Cannot invoke `clone` without resorting to reflection (Item 65) 
+    - Even a reflective invocation may fail, because there is no guarantee that the object has an accessible `clone` method
+- Despite this flaw and many others, the facility is in reasonably wide use, so it pays to understand it. 
+- This item tells you how to implement a well-behaved `clone` method, discusses when it is appropriate to do so, and presents alternatives.
+
+If a class implements `Cloneable`, Object’s `clone` method returns a field-by-field copy of the object; otherwise it throws `CloneNotSupportedException`. This is a highly atypical use of interfaces and not one to be emulated. Normally, implementing an interface says something about what a class can do for its clients. In this case, it modifies the behavior of a protected method on a superclass.
+
+__In practice, a class implementing `Cloneable` is expected to provide a properly functioning public `clone` method__.
+
 All classes that implement `Cloneable` should override `clone` with a public method whose return type is the class itself. This method should first call `super.clone` and then fix any fields that need to be fixed. Typically, this means copying any mutable objects that comprise the internal “deep structure” of the object being cloned, and replacing the clone’s references to these objects with references to the copies. While these internal copies can generally be made by calling `clone` recursively, this is not always the best approach. If the class contains only primitive fields or references to immutable objects, then it is probably the case that no fields need to be fixed. There are exceptions to this rule. For example, a field representing a serial number or other unique ID or a field representing the object’s creation time will need to be fixed, even if it is primitive or immutable.
 
 ## Item 14: Consider implementing Comparable

@@ -15,8 +15,8 @@ My notes on Effective Java, Third Edition
 
 ## [Chapter 3: Methods Common to All Objects](chapter-3.md)
 
-- [Item 10: Obey the general contract when overrriding equals](chapter-3.md#item-10-obey-the-general-contract-when-overrriding-equals)
-- [Item 11: Always override hashCode when you override equals](chapter-3.md#item-11-always-override-hashCode-when-you-override-equals)
-- [Item 12: Always override toString](chapter-3.md#item-12-always-override-toString)
+- [Item 10: Obey the general contract when overrriding equals](chapter-3.md#item-10-obey-the-general-contract-when-overriding-equals)
+- [Item 11: Always override hashCode when you override equals](chapter-3.md#item-11-always-override-hashcode-when-you-override-equals)
+- [Item 12: Always override toString](chapter-3.md#item-12-always-override-tostring)
 - [Item 13: Override clone judiciously](chapter-3.md#item-13-override-clone-judiciously)
-- [Item 14: Consider implementing Comparable](chapter-3.md#item-14-consider-implementing-Comparable)
+- [Item 14: Consider implementing Comparable](chapter-3.md#item-14-consider-implementing-comparable)
