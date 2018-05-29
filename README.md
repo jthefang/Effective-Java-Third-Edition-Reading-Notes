@@ -20,3 +20,17 @@ My notes on Effective Java, Third Edition
 - [Item 12: Always override toString](chapter-3.md#item-12-always-override-tostring)
 - [Item 13: Override clone judiciously](chapter-3.md#item-13-override-clone-judiciously)
 - [Item 14: Consider implementing Comparable](chapter-3.md#item-14-consider-implementing-comparable)
+
+## [Chapter 4: Classes and Interfaces](chapter-4.md)
+
+- [Item 15: Minimize the accessibility of classes and members](chapter-3.md#item-15-minimize-the-accessibility-of-classes-and-members)
+- [Item 16: In public classes, use accessor methods, not public fields](chapter-3.md#item-16-always-override-hashcode-when-you-override-equals)
+- [Item 17: Minimize mutability](chapter-3.md#item-17-always-override-tostring)
+- [Item 18: Favor composition over inheritance](chapter-3.md#item-18-override-clone-judiciously)
+- [Item 19: Design and document for inheritance or else prohibit it](chapter-3.md#item-19-consider-implementing-comparable)
+- [Item 20: Prefer interfaces to abstract classes](chapter-3.md#item-20-consider-implementing-comparable)
+- [Item 21: Design interfaces for posterity](chapter-3.md#item-21-consider-implementing-comparable)
+- [Item 22: Use interfaces only to define types](chapter-3.md#item-22-consider-implementing-comparable)
+- [Item 23: Prefer class hierarchies to tagged classes](chapter-3.md#item-23-consider-implementing-comparable)
+- [Item 24: Favor static member classes over nonstatic](chapter-3.md#item-24-consider-implementing-comparable)
+- [Item 25: Limit source files to a single top-level class](chapter-3.md#item-25-consider-implementing-comparable)
