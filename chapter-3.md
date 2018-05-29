@@ -176,12 +176,165 @@ If a class implements `Cloneable`, Object’s `clone` method returns a field-by-
 
 __In practice, a class implementing `Cloneable` is expected to provide a properly functioning public `clone` method__.
 
-All classes that implement `Cloneable` should override `clone` with a public method whose return type is the class itself. This method should first call `super.clone` and then fix any fields that need to be fixed. Typically, this means copying any mutable objects that comprise the internal “deep structure” of the object being cloned, and replacing the clone’s references to these objects with references to the copies. While these internal copies can generally be made by calling `clone` recursively, this is not always the best approach. If the class contains only primitive fields or references to immutable objects, then it is probably the case that no fields need to be fixed. There are exceptions to this rule. For example, a field representing a serial number or other unique ID or a field representing the object’s creation time will need to be fixed, even if it is primitive or immutable.
+__Immutable classes should never provide a clone method because it would
+merely encourage wasteful copying__.
+
+__In effect, the clone method functions as a constructor; you must ensure that it does no harm to the original object and that it properly establishes invariants on the clone__.
+
+All classes that implement `Cloneable` should override `clone` with a public method whose return type is the class itself. This method should first call `super.clone` and then fix any fields that need to be fixed. Typically, this means copying any mutable objects that comprise the internal "deep structure" of the object being cloned, and replacing the clone's references to these objects with references to the copies (this is why, like serialization, __the Cloneable architecture is incompatible with normal use of final fields referring to mutable objects__, except in cases where the mutable objects may be safely shared between an object and its clone). 
+
+While these internal copies can generally be made by calling `clone` recursively, this is not always the best approach. If the class contains only primitive fields or references to immutable objects, then it is probably the case that no fields need to be fixed. There are exceptions to this rule. For example, a field representing a serial number or other unique ID or a field representing the object’s creation time will need to be fixed/changed, even if it is primitive or immutable.
+
+```java
+// Clone method for class with no references to mutable state
+@Override public PhoneNumber clone() {
+    try {
+        //Cast is guaranteed to succeed
+        return (PhoneNumber) super.clone();
+    } catch (CloneNotSupportedException e) {
+        //a checked exception (checked for at compile time to be handled)
+        throw new AssertionError(); // Can't happen
+    }
+}
+```
+
+```java
+// Clone method for class with references to mutable state
+@Override 
+public Stack clone() {
+    try {
+        Stack result = (Stack) super.clone();
+        result.elements = elements.clone(); //proper way to clone an array
+        return result;
+    } catch (CloneNotSupportedException e) {
+        throw new AssertionError();
+    }
+}
+```
+
+__Public clone methods should omit the throws clause__, as methods that don’t throw checked exceptions are easier to use (Item 71).
+
+Leave clone implementation up to subclasses. If you want to prevent subclasses from implementing a clone method:
+
+```java
+// clone method for extendable class not supporting Cloneable
+@Override
+protected final Object clone() throws CloneNotSupportedException {
+    throw new CloneNotSupportedException();
+}
+```
+
+__A better approach to object copying is to provide a copy constructor or copy factory__.
+
+```java
+// Copy constructor
+public Yum(Yum yum) { ... };
+
+// Copy factory
+public static Yum newInstance(Yum yum) { ... };
+```
+
+Given all the problems associated with Cloneable, new interfaces should not extend it, and new extendable classes should not implement it. While it’s less harmful for final classes to implement Cloneable, this should be viewed as a performance optimization, reserved for the rare cases where it is justified (Item 67). As a rule, copy functionality is best provided by constructors or factories. A notable exception to this rule is arrays, which are best copied with the clone method.
 
 ## Item 14: Consider implementing Comparable
+By implementing `Comparable`, a class indicates that its instances have a natural ordering. This makes sorting possible and searching efficient (think binary search).
+
+If you are writing a value class with an obvious natural ordering, such as alphabetical order, numerical order, or chronological order, you should implement the Comparable interface:
+
+```java
+public interface Comparable<T> {
+    int compareTo(T t);
+}
+```
+
 In the following description, the notation `sgn(expression)` designates the mathematical signum function, which is defined to return -1, 0, or 1, according to whether the value of expression is negative, zero, or positive.
 
 - The implementor must ensure `sgn(x.compareTo(y)) == -sgn(y.compareTo(x))` for all `x` and `y`. (This implies that `x.compareTo(y)` must throw an exception if and only if `y.compareTo(x)` throws an exception.)
 - The implementor must also ensure that the relation is transitive: `(x.compareTo(y) > 0 && y.compareTo(z) > 0)` implies `x.compareTo(z) > 0`.
 - Finally, the implementor must ensure that `x.compareTo(y) == 0` implies that `sgn(x.compareTo(z)) == sgn(y.compareTo(z))`, for all `z`.
-- It is strongly recommended, but not strictly required, that `(x.compareTo(y) == 0) == (x.equals(y))`. Generally speaking, any class that implements the `Comparable` interface and violates this condition should clearly indicate this fact. The recommended language is “Note: This class has a natural ordering that is inconsistent with equals.”
+- It is strongly recommended, but not strictly required, that `(x.compareTo(y) == 0) == (x.equals(y))`. Generally speaking, any class that implements the `Comparable` interface and violates this condition should clearly indicate this fact. The recommended language is "Note: This class has a natural ordering that is inconsistent with equals."
+    - A class whose `compareTo` method imposes an order that is inconsistent with `equals` will still work, but sorted collections containing elements of the class may not obey the general contract of the appropriate collection interfaces (`Collection`, `Set`, or `Map`). This is because the general contracts for these interfaces are defined in terms of the `equals` method, but sorted collections use the equality test imposed by `compareTo` in place of `equals`. It is not a catastrophe if this happens, but it’s something to be aware of.
+    - e.g. the `BigDecimal` class, whose `compareTo` method is inconsistent with `equals`. If add to a `HashSet` instance `new BigDecimal("1.0")` and `new BigDecimal("1.00")`, the set will contain two elements because the two `BigDecimal` instances added to the set are unequal when compared using the `equals` method. If you use `TreeSet` instead HashSet, the set will contain only one element because the two `BigDecimal` instances are equal when compared using the `compareTo` method. (See the `BigDecimal` documentation for details.)
+
+- Same caveat as `equals` because of the properties of reflexivity, symmetry and trsntitivity: there is no way to extend an instantiable class with a new value component while preserving the `compareTo` contract, unless you are willing to forgo the benefits of object-oriented abstraction (Item 10). (i.e. How do you add the value component to the `compareTo` without accessing elements you're not allowed to?) The same workaround applies, too. If you want to add a value component to a class that implements `Comparable`, don’t extend it; write an unrelated class containing an instance of the first class. Then provide a "view" method that returns the contained instance. This frees you to implement whatever `compareTo` method you like on the containing class, while allowing its client to view an instance of the containing class as an instance of the contained class when needed.
+
+- In a `compareTo` method, fields are compared for order rather than equality. To compare object reference fields, invoke the `compareTo` method recursively. If a field does not implement Comparable or you need a nonstandard ordering, use a `Comparator` instead. You can write your own comparator or use an existing one, as in this `compareTo` method for `CaseInsensitiveString` in Item 10:
+
+```java
+// Single-field Comparable with object reference field
+public final class CaseInsensitiveString
+    implements Comparable<CaseInsensitiveString> {
+    public int compareTo(CaseInsensitiveString cis) {
+        return String.CASE_INSENSITIVE_ORDER.compare(s, cis.s);
+    }
+    ... // Remainder omitted
+}
+```
+
+Note that `CaseInsensitiveString` implements `Comparable<CaseInsensitiveString>`. This means that a `CaseInsensitiveString` reference can be compared only to another `CaseInsensitiveString` reference. This is the normal pattern to follow when declaring a class to implement `Comparable`.
+
+- In Java 7, static `compare` methods were added to all of Java’s boxed primitive classes. __Use of the relational operators < and > in `compareTo` methods is verbose and error-prone and no longer recommended__.
+
+If a class has multiple significant fields, the order in which you compare them is critical. Start with the most significant field and work your way down. If a comparison results in anything other than zero (which represents equality), you’re done; just return the result. If the most significant field is equal, compare the next-most-significant field, and so on, until you find an unequal field or compare the least significant field. Here is a `compareTo` method for the `PhoneNumber` class in Item 11 demonstrating this technique:
+
+```java
+// Multiple-field Comparable with primitive fields
+public int compareTo(PhoneNumber pn) {
+    int result = Short.compare(areaCode, pn.areaCode);
+    if (result == 0) {
+        result = Short.compare(prefix, pn.prefix);
+    if (result == 0)
+        result = Short.compare(lineNum, pn.lineNum);
+    }
+    return result;
+}
+```
+
+- In Java 8, the `Comparator` interface was outfitted with a set of comparator construction methods, which enable fluent construction of comparators. These comparators can then be used to implement a `compareTo` method, as required by the `Comparable` interface. Many programmers prefer the conciseness of this approach, though it does come at a modest performance cost: sorting arrays of `PhoneNumber` instances is about 10% slower on my machine. When using this approach, consider using Java’s static import facility so you can refer to static comparator construction methods by their simple names for clarity and brevity. Here’s how the `compareTo` method for `PhoneNumber` looks using this approach:
+
+```java
+// Comparable with comparator construction methods
+private static final Comparator<PhoneNumber> COMPARATOR =
+comparingInt((PhoneNumber pn) -> pn.areaCode)
+.thenComparingInt(pn -> pn.prefix)
+.thenComparingInt(pn -> pn.lineNum);
+public int compareTo(PhoneNumber pn) {
+return COMPARATOR.compare(this, pn);
+}
+```
+
+This implementation builds a comparator at class initialization time, using two comparator construction methods. The first is comparingInt. It is a static method that takes a key extractor function that maps an object reference to a key of type `int` and returns a comparator that orders instances according to that key. In the previous example, `comparingInt` takes a lambda () that extracts the area code from a `PhoneNumber` and returns a `Comparator<PhoneNumber>` that orders phone numbers according to their area codes. Note that the lambda explicitly specifies the type of its input parameter (`PhoneNumber pn`). It turns out that in this situation, Java’s type inference isn’t powerful enough to figure the type out for itself, so we’re forced to help it in order to make the program compile.
+
+If two phone numbers have the same area code, we need to further refine the comparison, and that’s exactly what the second comparator construction method, `thenComparingInt`, does. It is an instance method on `Comparator` that takes an `int` key extractor function, and returns a comparator that first applies the original comparator and then uses the extracted key to break ties. You can stack up as many calls to `thenComparingInt` as you like, resulting in a lexicographic ordering. In the example above, we stack up two calls to `thenComparingInt`, resulting in an ordering whose secondary key is the prefix and whose tertiary key is the line number.
+
+There are also comparator construction methods for object reference types. The static method, named `comparing`, has two overloadings. One takes a key extractor and uses the keys' natural order. The second takes both a key extractor and a comparator to be used on the extracted keys. There are three overloadings of the instance method, which is named `thenComparing`. One overloading takes only a comparator and uses it to provide a secondary order. A second overloading takes only a key extractor and uses the key’s natural order as a secondary order. The final overloading takes both a key extractor and a comparator to be used on the extracted keys.
+
+- Don't be clever:
+
+```java
+// BROKEN difference-based comparator - violates transitivity!
+static Comparator<Object> hashCodeOrder = new Comparator<>() {
+    public int compare(Object o1, Object o2) {
+        return o1.hashCode() - o2.hashCode();
+    }
+};
+```
+
+Do not use this technique. It is fraught with danger from integer overflow and IEEE 754 floating point arithmetic artifacts [JLS 15.20.1, 15.21.1]. Furthermore, the resulting methods are unlikely to be significantly faster than those written using the techniques described in this item. Use either a static compare method:
+
+```java
+// Comparator based on static compare method
+static Comparator<Object> hashCodeOrder = new Comparator<>() {
+    public int compare(Object o1, Object o2) {
+        return Integer.compare(o1.hashCode(), o2.hashCode());
+    }
+};
+```
+
+or a comparator construction method:
+
+```java
+// Comparator based on Comparator construction method
+static Comparator<Object> hashCodeOrder =
+    Comparator.comparingInt(o -> o.hashCode());
+```
