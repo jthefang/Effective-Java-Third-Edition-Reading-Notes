@@ -34,3 +34,14 @@ My notes on Effective Java, Third Edition
 - [Item 23: Prefer class hierarchies to tagged classes](chapter-4.md#item-23-prefer-class-hierarchies-to-tagged-classes)
 - [Item 24: Favor static member classes over nonstatic](chapter-4.md#item-24-favor-static-member-classes-over-nonstatic)
 - [Item 25: Limit source files to a single top-level class](chapter-4.md#item-25-limit-source-files-to-a-single-top-level-class)
+
+## [Chapter 5: Generics](chapter-5.md)
+
+- [Item 26: Don’t use raw types in new code](chapter-5.md#item-26-minimize-the-accessibility-of-classes-and-members)
+- [Item 27: Eliminate unchecked warnings](chapter-5.md#item-27-in-public-classes-use-accessor-methods-not-public-fields)
+- [Item 28: Prefer lists to arrays](chapter-5.md#item-28-minimize-mutability)
+- [Item 29: Favor generic types](chapter-5.md#item-29-favor-composition-over-inheritance)
+- [Item 30: Favor generic methods](chapter-5.md#item-30-prefer-interfaces-to-abstract-classes)
+- [Item 31: Use bounded wildcards to increase API flexibility](chapter-5.md#item-31-design-interfaces-for-posterity)
+- [Item 32: Combine generics and varargs judiciously](chapter-5.md#item-32-use-interfaces-only-to-define-types)
+- [Item 33: Consider type safe heterogeneous containers](chapter-5.md#item-33-prefer-class-hierarchies-to-tagged-classes)

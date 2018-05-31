@@ -175,14 +175,100 @@ You can inject new functionality into interfaces via default methods, but existi
 
 ## Item 22: Use interfaces only to define types
 
+When a class implements an interface, the interface serves as a type that can be used to refer to instances of the class. That a class implements an interface should therefore say something about what a client can do with instances of the class. It is inappropriate to define an interface for any other purpose.
+
 Interfaces should be used only to define types. They should not be used to export constants.
+
+If you want to export constants, there are several reasonable choices:
+
+1. If the constants are strongly tied to an existing class or interface, you should add them to the class or interface. For example, all of the boxed numerical primitive classes, such as `Integer` and `Double`, export `MIN_VALUE` and `MAX_VALUE` constants. 
+2. If the constants are best viewed as members of an enumerated type, you should export them with an enum type (Item 34). 
+3. Otherwise, you should export the constants with a noninstantiable utility class (Item 4). Here is a utility class version of the `PhysicalConstants` example shown earlier:
+
+```java
+// Constant utility class
+package com.effectivejava.science;
+public class PhysicalConstants {
+    private PhysicalConstants() { } // Prevents instantiation
+    public static final double AVOGADROS_NUMBER = 6.022_140_857e23;
+    public static final double BOLTZMANN_CONST = 1.380_648_52e-23;
+    public static final double ELECTRON_MASS = 9.109_383_56e-31;
+}
+
+// Use of static import to avoid qualifying constants
+import static com.effectivejava.science.PhysicalConstants.*;
+    public class Test {
+        double atoms(double mols) {
+        return AVOGADROS_NUMBER * mols;
+    }
+    ...
+    // Many more uses of PhysicalConstants justify static import
+}
+```
 
 ## Item 23: Prefer class hierarchies to tagged classes
 
 Tagged classes are seldom appropriate. If you’re tempted to write a class with an explicit tag field, think about whether the tag could be eliminated and the class replaced by a hierarchy. When you encounter an existing class with a tag field, consider refactoring it into a hierarchy.
 
+To transform a tagged class into a class hierarchy, first define an abstract class containing an abstract method for each method in the tagged class whose behavior depends on the tag value. In the `Figure` class, there is only one such method, which is `area`. This abstract class is the root of the class hierarchy. If there are any methods whose behavior does not depend on the value of the tag, put them in this class. Similarly, if there are any data fields used by all the flavors, put them in this class.
+
+Next, define a concrete subclass of the root class for each flavor of the original tagged class. In our example, there are two: circle and rectangle. Include in each subclass the data fields particular to its flavor. In our example, `radius` is particular to circle, and `length` and `width` are particular to rectangle. Also include in each subclass the appropriate implementation of each abstract method in the root class.
+
 ## Item 24: Favor static member classes over nonstatic
 
-There are four different kinds of nested classes, and each has its place. If a nested class needs to be visible outside of a single method or is too long to fit comfortably inside a method, use a member class. If each instance of the member class needs a reference to its enclosing instance, make it nonstatic; otherwise, make it static. Assuming the class belongs inside a method, if you need to create instances from only one location and there is a preexisting type that characterizes the class, make it an anonymous class; otherwise, make it a local class.
+A nested class is a class defined within another class. A nested class should exist only to serve its enclosing class. If a nested class would be useful in some other context, then it should be a top-level class. There are four different kinds of nested classes: *static member classes, nonstatic member classes, anonymous classes*, and *local classes*. All but the first kind are known as inner classes. 
+
+1. Static member class
+    - An ordinary class that happens to be declared inside another class and has access to all of the enclosing class’s members, even those declared private
+    - Is a static member of its enclosing class and obeys the same accessibility rules as other static members
+    - If it is declared private, it is accessible only within the enclosing class, and so forth
+    - One common use of a static member class is as a public helper class, useful only in conjunction with its outer class.
+2. Nonstatic member class
+    - Each instance of a nonstatic member class is implicitly associated with an enclosing instance of its containing class
+        -The association between a nonstatic member class instance and its enclosing instance is established when the member class instance is created and cannot be modified thereafter. Normally, the association is established automatically by invoking a nonstatic member class constructor from within an instance method of the enclosing class. It is possible, though rare, to establish the association manually using the expression `enclosingInstance.new MemberClass(args)`. As you would expect, the association takes up space in the nonstatic member class instance and adds time to its construction.
+    - Within instance methods of a nonstatic member class, you can invoke methods on the enclosing instance or obtain a reference to the enclosing instance using the *qualified this* construct 
+    - If an instance of a nested class can exist in isolation from an instance of its enclosing class, then the nested class must be a static member class: it is impossible to create an instance of a nonstatic member class without an enclosing instance. __If you declare a member class that does not require access to an enclosing instance, always put the static modifier in its declaration__, making it a static rather than a nonstatic member class. If you omit this modifier, each instance will have a hidden extraneous reference to its enclosing instance (potential memory error)
+    - One common use of a nonstatic member class is to define an `Adapter` that allows an instance of the outer class to be viewed as an instance of some unrelated class. For example, implementations of the `Map` interface typically use nonstatic member classes to implement their collection views, which are returned by `Map`’s `keySet`, `entrySet`, and `values` methods. Similarly, implementations of the collection interfaces, such as `Set` and `List`, typically use nonstatic member classes to implement their iterators:
+
+    ```java
+    // Typical use of a nonstatic member class
+    public class MySet<E> extends AbstractSet<E> {
+        ... // Bulk of the class omitted
+        
+        @Override public Iterator<E> iterator() {
+            return new MyIterator();
+        }
+
+        private class MyIterator implements Iterator<E> {
+            ...
+        }
+    }
+    ```
+
+3. Anonymous class
+    - An anonymous class has no name. It is not a member of its enclosing class. Rather than being declared along with other members, it is simultaneously declared and instantiated at the point of use. 
+    - Anonymous classes are permitted at any point in the code where an expression is legal. 
+    - Anonymous classes have enclosing instances if and only if they occur in a nonstatic context. But even if they occur in a static context, they cannot have any static members other than constant variables, which are final primitive or string fields initialized to constant expressions
+    - Limitations on the applicability of anonymous classes: 
+        - You can’t instantiate them except at the point they’re declared 
+        - You can’t perform `instanceof` tests or do anything else that requires you to name the class. 
+        - You can’t declare an anonymous class to implement multiple interfaces or to extend a class and implement an interface at the same time. 
+        - Clients of an anonymous class can’t invoke any members except those it inherits from its supertype. 
+        - Because anonymous classes occur in the midst of expressions, they must be kept short — about ten lines or fewer — or readability will suffer.
+    - Before lambdas were added to Java (Chapter 6), anonymous classes were the preferred means of creating small function objects and process objects on the fly, but lambdas are now preferred (Item 42). - Another common use of anonymous classes is in the implementation of static factory methods (see `intArrayAsList` in Item 20).\
+
+4. Local classes
+    - least frequently used of the four kinds of nested classes 
+    - A local class can be declared practically anywhere a local variable can be declared and obeys the same scoping rules
+    - Like member classes, they have names and can be used repeatedly. 
+    - Like anonymous classes, they have enclosing instances only if they are defined in a nonstatic context, and they cannot contain static members
+    - Like anonymous classes, they should be kept short so as not to harm readability
+
+Recap: if a nested class needs to be visible outside of a single method or is too long to fit comfortably inside a method, use a member class. If each instance of the member class needs a reference to its enclosing instance, make it nonstatic; otherwise, make it static. Assuming the class belongs inside a method, if you need to create instances from only one location and there is a preexisting type that characterizes the class, make it an anonymous class; otherwise, make it a local class.
 
 ## Item 25: Limit source files to a single top-level class
+While the Java compiler lets you define multiple top-level classes in a single source file, there are no benefits associated with doing so, and there are significant risks. The risks stem from the fact that defining multiple top-level classes in a source file makes it possible to provide multiple definitions for a class. Which definition gets used is affected by the order in which the source files are passed to the compiler.
+
+While the Java compiler lets you define multiple top-level classes in a single source file, there are no benefits associated with doing so, and there are significant risks. The risks stem from the fact that defining multiple top-level classes in a source file makes it possible to provide multiple definitions for a class. Which definition gets used is affected by the order in which the source files are passed to the compiler.
+
+__Never put multiple top-level classes or interfaces in a single source file__. Following this rule guarantees that you can’t have multiple definitions for a single class at compile time. This in turn guarantees that the class files generated by compilation, and the behavior of the resulting program, are independent of the order in which the source files are passed to the compiler.
