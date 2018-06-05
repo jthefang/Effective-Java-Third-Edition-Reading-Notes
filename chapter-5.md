@@ -46,6 +46,7 @@ Using raw types can lead to exceptions at runtime, so don’t use them in new co
 
 For quick reference, the terms introduced in this item (and a few introduced later in this chapter) are summarized in 
 the following table:
+
 !===================================================================================!
 Term                                Example                         Item
 
