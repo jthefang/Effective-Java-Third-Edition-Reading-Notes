@@ -45,3 +45,14 @@ My notes on Effective Java, Third Edition
 - [Item 31: Use bounded wildcards to increase API flexibility](chapter-5.md#item-31-use-bounded-wildcards-to-increase-api-flexibility)
 - [Item 32: Combine generics and varargs judiciously](chapter-5.md#item-32-combine-generics-and-varargs-judiciously)
 - [Item 33: Consider type safe heterogeneous containers](chapter-5.md#item-33-consider-type-safe-heterogeneous-containers)
+
+## [Chapter 6: Enums and Annotations](chapter-6.md)
+
+- [Item 34: Use enums instead of int constants](chapter-5.md#item-26-dont-use-raw-types-in-new-code)
+- [Item 35: Use instance fields instead of ordinals](chapter-5.md#item-27-eliminate-unchecked-warnings)
+- [Item 36: Use EnumSet instead of bit fields](chapter-5.md#item-28-prefer-lists-to-arrays)
+- [Item 37: Use EnumMap instead of ordinal indexing](chapter-5.md#item-29-favor-generic-types)
+- [Item 38: Emulate extensible enums with interfaces](chapter-5.md#item-30-favor-generic-methods)
+- [Item 39: Prefer annotations to naming patterns](chapter-5.md#item-31-use-bounded-wildcards-to-increase-api-flexibility)
+- [Item 40: Consistently use the Override annotation](chapter-5.md#item-32-combine-generics-and-varargs-judiciously)
+- [Item 41: Use marker interfaces to define types](chapter-5.md#item-33-consider-type-safe-heterogeneous-containers)
