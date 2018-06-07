@@ -18,5 +18,10 @@
 			- avoid tedious counteroffers, cut to the chase
 3. Purchase
 	- use the right broker, select the right loans, manage your debt-to-income ratio
-	- the right broker:
-		
+	- the right broker: find the right mortgage broker who understands how to finance multiple properties on one person’s credit
+	- select the right loans: Also, maximizing the benefits of our formula requires that investors learn how to become profit conscious, rather than rate conscious. Higher interest rates can make investors more money than lower rates. Because the goal is to finance as many homes as possible, each additional property may be funded at a higher interest rate. Paying higher interest rates to particular banks enables us to purchase twice the investment properties as compared to what we could do if we went with the banks with the lowest rates
+	- optimize debt-to-income ratio through compassionate financing. The higher your debt is relative to your income, the less likely you are to get additional loans. Through Compassionate Financing, our proprietary hybrid rent-to-own system, you can collect between $300 and $600 per month more than is possible through renting out properties. This offsets the debt incurred by additional loans and increases your ability to purchase additional investment properties. This is opposed to renting, where your debt-to-income ratio worsens with each transaction, and usually kills your ability to grow your portfolio after you’ve purchased a couple of homes.
+
+4. Serve through compassionate financing
+	- rent-to-own program similar to lease options. It’s a powerful and highly profitable system for the following reasons: 1) it incorporates the best elements of lease options while eliminating the flaws, 2) it relieves investors of the time and effort required to maintain rentals, 3) it generates much higher profits than either rentals or flipping, and 4) it provides substantial benefits to tenants.
+	- Unlike rentals, with Compassionate Financing there is no property maintenance for investors, since the contract stipulates that tenants are responsible for all maintenance. The only time and effort involved is in marketing the property, screening tenants, and putting contracts in place.

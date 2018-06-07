@@ -56,3 +56,13 @@ My notes on Effective Java, Third Edition
 - [Item 39: Prefer annotations to naming patterns](chapter-6.md#item-39-prefer-annotations-to-naming-patterns)
 - [Item 40: Consistently use the Override annotation](chapter-6.md#item-40-consistently-use-the-override-annotation)
 - [Item 41: Use marker interfaces to define types](chapter-6.md#item-41-use-marker-interfaces-to-define-types)
+
+## [Chapter 7: Lambdas and Streams](chapter-7.md)
+
+- [Item 42: Prefer lambdas to anonymous classes](chapter-6.md#item-34-use-enums-instead-of-int-constants)
+- [Item 43: Prefer method references to lambdas](chapter-6.md#item-35-use-instance-fields-instead-of-ordinals)
+- [Item 44: Favor the use of standard functional interfaces](chapter-6.md#item-36-use-enumset-instead-of-bit-fields)
+- [Item 45: Use streams judiciously](chapter-6.md#item-37-use-enummap-instead-of-ordinal-indexing)
+- [Item 46: Prefer side-effect-free functions in streams](chapter-6.md#item-38-emulate-extensible-enums-with-interfaces)
+- [Item 47: Prefer Collection to Stream as a return type](chapter-6.md#item-39-prefer-annotations-to-naming-patterns)
+- [Item 48: Use caution when making streams parallel](chapter-6.md#item-40-consistently-use-the-override-annotation)
