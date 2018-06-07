@@ -122,14 +122,14 @@ do not.
     2. Unbound references: the receiving object is specified when the function object is applied, via an additional parameter before the method's declared parameters (like Python's `self` param)
     3. Constructor references serve as factory objects and there are 2 kinds, for classes and arrays
 
-| __Method Ref Type__ | __Example__              | __Lambda Equivalent__         |
-| ------------------- | ------------------------ | ----------------------------- |
-| Static              | `Integer::parseInt`      | `str -> Integer.parseInt(str) |
-| Bound               | `Instant.now()::isAfter` | Instant then = Instant.now(); |
-|                     |                          | t -> then.isAfter(t)          |
-| Unbound             | `String::toLowerCase`    | str -> str.toLowerCase()      |
-| Class Constructor   | `TreeMap<K,V>::new`      | () -> new TreeMap<K,V>        |
-| Array Constructor   | `int[]::new`             | len -> new int[len]           |
+| __Method Ref Type__ | __Example__              | __Lambda Equivalent__           |
+| ------------------- | ------------------------ | -----------------------------   |
+| Static              | `Integer::parseInt`      | `str -> Integer.parseInt(str)`  |
+| Bound               | `Instant.now()::isAfter` | `Instant then = Instant.now();` |
+|                     |                          | `t -> then.isAfter(t)`          |
+| Unbound             | `String::toLowerCase`    | `str -> str.toLowerCase()`      |
+| Class Constructor   | `TreeMap<K,V>::new`      | `() -> new TreeMap<K,V>`        |
+| Array Constructor   | `int[]::new`             | `len -> new int[len]`           |
 
 Method references often provide a more succinct alternative to lambdas. __Where method references are shorter and clearer, use them; where they aren’t, stick with lambdas__.
 
