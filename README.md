@@ -59,10 +59,10 @@ My notes on Effective Java, Third Edition
 
 ## [Chapter 7: Lambdas and Streams](chapter-7.md)
 
-- [Item 42: Prefer lambdas to anonymous classes](chapter-6.md#item-34-use-enums-instead-of-int-constants)
-- [Item 43: Prefer method references to lambdas](chapter-6.md#item-35-use-instance-fields-instead-of-ordinals)
-- [Item 44: Favor the use of standard functional interfaces](chapter-6.md#item-36-use-enumset-instead-of-bit-fields)
-- [Item 45: Use streams judiciously](chapter-6.md#item-37-use-enummap-instead-of-ordinal-indexing)
-- [Item 46: Prefer side-effect-free functions in streams](chapter-6.md#item-38-emulate-extensible-enums-with-interfaces)
-- [Item 47: Prefer Collection to Stream as a return type](chapter-6.md#item-39-prefer-annotations-to-naming-patterns)
-- [Item 48: Use caution when making streams parallel](chapter-6.md#item-40-consistently-use-the-override-annotation)
+- [Item 42: Prefer lambdas to anonymous classes](chapter-7.md#item-42-prefer-lambdas-to-anonymous-classes)
+- [Item 43: Prefer method references to lambdas](chapter-7.md#item-43-prefer-method-references-to-lambdas)
+- [Item 44: Favor the use of standard functional interfaces](chapter-7.md#item-44-favor-the-use-of-standard-functional-interfaces)
+- [Item 45: Use streams judiciously](chapter-7.md#item-45-use-streams-judiciously)
+- [Item 46: Prefer side-effect-free functions in streams](chapter-7.md#item-46-prefer-side-effect-free-functions-in-streams)
+- [Item 47: Prefer Collection to Stream as a return type](chapter-7.md#item-47-prefer-collection-to-stream-as-a-return-type)
+- [Item 48: Use caution when making streams parallel](chapter-7.md#item-48-use-caution-when-making-streams-parallel)
