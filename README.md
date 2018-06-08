@@ -66,3 +66,14 @@ My notes on Effective Java, Third Edition
 - [Item 46: Prefer side-effect-free functions in streams](chapter-7.md#item-46-prefer-side-effect-free-functions-in-streams)
 - [Item 47: Prefer Collection to Stream as a return type](chapter-7.md#item-47-prefer-collection-to-stream-as-a-return-type)
 - [Item 48: Use caution when making streams parallel](chapter-7.md#item-48-use-caution-when-making-streams-parallel)
+
+## [Chapter 7: Methods](chapter-8.md)
+
+- [Item 49: Check parameters for validity](chapter-7.md#item-42-prefer-lambdas-to-anonymous-classes)
+- [Item 50: Make defensive copies when needed](chapter-7.md#item-43-prefer-method-references-to-lambdas)
+- [Item 51: Design method signatures carefully](chapter-7.md#item-44-favor-the-use-of-standard-functional-interfaces)
+- [Item 52: Use overloading judiciously](chapter-7.md#item-45-use-streams-judiciously)
+- [Item 53: Use varargs judiciously](chapter-7.md#item-46-prefer-side-effect-free-functions-in-streams)
+- [Item 54: Return empty collections or arrays, not nulls](chapter-7.md#item-47-prefer-collection-to-stream-as-a-return-type)
+- [Item 55: Return optionals judiciously](chapter-7.md#item-48-use-caution-when-making-streams-parallel)
+- [Item 56: Write doc comments for all exposed API elements](chapter-7.md#item-48-use-caution-when-making-streams-parallel)
