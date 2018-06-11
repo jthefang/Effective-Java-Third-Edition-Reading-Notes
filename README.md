@@ -77,3 +77,18 @@ My notes on Effective Java, Third Edition
 - [Item 54: Return empty collections or arrays, not nulls](chapter-8.md#item-54-return-empty-arrays-or-collections-not-nulls)
 - [Item 55: Return optionals judiciously](chapter-8.md#item-55-return-optionals-judiciously)
 - [Item 56: Write doc comments for all exposed API elements](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
+
+## [Chapter 9: General Programming](chapter-9.md)
+
+- [Item 57: Minimize the scope of local variables](chapter-8.md#item-49-check-parameters-for-validity)
+- [Item 58: Prefer for-each loops to traditional for loops](chapter-8.md#item-50-make-defensive-copies-when-needed)
+- [Item 59: Know and use the libraries](chapter-8.md#item-51-design-method-signatures-carefully)
+- [Item 60: Avoid float and double if exact answers are required](chapter-8.md#item-52-use-overloading-judiciously)
+- [Item 61: Prefer primitive types to boxed primitives](chapter-8.md#item-53-use-varargs-judiciously)
+- [Item 62: Avoid strings where other types are more appropriate](chapter-8.md#item-54-return-empty-arrays-or-collections-not-nulls)
+- [Item 63: Beware the performance of string concatenation](chapter-8.md#item-55-return-optionals-judiciously)
+- [Item 64: Refer to objects by their interfaces](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
+- [Item 65: Prefer interfaces to reflection](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
+- [Item 66: Use native methods judiciously](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
+- [Item 67: Optimize judiciously](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
+- [Item 68: Adhere to generally accepted naming convetions](chapter-8.md#item-56-write-doc-comments-for-all-exposed-api-elements)
