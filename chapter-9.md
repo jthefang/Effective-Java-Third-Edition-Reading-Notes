@@ -136,16 +136,127 @@ There is one caveat: if the original implementation offered some special functio
 
 ## Item 65: Prefer interfaces to reflection
 
+The core reflection facility, `java.lang.reflect`, offers programmatic access to arbitrary classes. Given a `Class` object, you can obtain `Constructor`, `Method`, and `Field` instances representing the constructors, methods, and fields of the class represented by the `Class` instance. These objects provide programmatic access to the class’s member names, field types, method signatures, and so on.
+
+Moreover, `Constructor, Method`, and `Field` instances let you manipulate their underlying counterparts reflectively: you can construct instances, invoke methods, and access fields of the underlying class by invoking methods on the `Constructor, Method`, and `Field` instances. For example, `Method.invoke` lets you invoke any method on any object of any class (subject to the usual security constraints). Reflection allows one class to use another, even if the latter class did not exist when the former was compiled. This power, however, comes at a price:
+	- __You lose all the benefits of compile-time type checking__, including exception checking. If a program attempts to invoke a nonexistent or inaccessible method reflectively, it will fail at runtime unless you’ve taken special precautions.
+	- __The code required to perform reflective access is clumsy and verbose__. It is tedious to write and difficult to read.
+	- __Performance suffers__. Reflective method invocation is much slower than normal method invocation. 
+
+- Examples of applications that require reflection: code analysis tools and ependency injection frameworks.
+
+- __If you have any doubts as to whether your application requires reflection it probably doesn't.__
+
+- __You can obtain many of the benefits of reflection while incurring few of its costs by using it only in a very limited form__. For many programs that must use a class that is unavailable at compile time, there exists at compile time an appropriate interface or superclass by which to refer to the class (Item 64). If this is the case, you can __create instances reflectively and access them normally via their interface or superclass__.
+
+Example: For example, here is a program that creates a `Set<String>` instance whose class is specified by the first command line argument. The program inserts the remaining command line arguments into the set and prints it. Regardless of the first argument, the program prints the remaining arguments with duplicates eliminated. The order in which these arguments are printed, however, depends on the class specified in the first argument. If you specify `java.util.HashSet`, they’re printed in apparently random order; if you specify `java.util.TreeSet`, they’re printed in alphabetical order because the elements in a TreeSet are sorted:
+
+```java
+// Reflective instantiation with interface access
+public static void main(String[] args) {
+	// Translate the class name into a Class object
+	Class<? extends Set<String>> cl = null;
+	try {
+	cl = (Class<? extends Set<String>>) // Unchecked cast!
+	Class.forName(args[0]);
+	} catch (ClassNotFoundException e) {
+	fatalError("Class not found.");
+	}
+	// Get the constructor
+	Constructor<? extends Set<String>> cons = null;
+	try {
+	cons = cl.getDeclaredConstructor();
+	} catch (NoSuchMethodException e) {
+	fatalError("No parameterless constructor");
+	}
+	// Instantiate the set
+	Set<String> s = null;
+	try {
+	s = cons.newInstance();
+	} catch (IllegalAccessException e) {
+	fatalError("Constructor not accessible");
+	} catch (InstantiationException e) {
+	fatalError("Class not instantiable.");
+	} catch (InvocationTargetException e) {
+	fatalError("Constructor threw " + e.getCause());
+	} catch (ClassCastException e) {
+	fatalError("Class doesn't implement Set");
+	}
+	// Exercise the set
+	s.addAll(Arrays.asList(args).subList(1, args.length));
+	System.out.println(s);
+}
+
+private static void fatalError(String msg) {
+	System.err.println(msg);
+	System.exit(1);
+}
+```
+
 Reflection is a powerful facility that is required for certain sophisticated system programming tasks, but it has many disadvantages. If you are writing a program that has to work with classes unknown at compile time, you should, if at all possible, use reflection only to instantiate objects, and access the objects using some interface or superclass that is known at compile time.
 
 ## Item 66: Use native methods judiciously
+
+The Java Native Interface (JNI) allows Java programs to call native methods, which are methods written in native programming languages such as C or C++. Historically, native methods have had three main uses. They provide access to platform-specific facilities such as registries. They provide access to existing libraries of native code, including legacy libraries that provide access to legacy data. Finally, native methods are used to write performance-critical parts of applications in native languages for improved performance.
+
+It is legitimate to use native methods to access platform-specific facilities, but it is seldom necessary: as the Java platform matured, it provided access to many features previously found only in host platforms. For example, the process API, added in Java 9, provides access to OS processes. It is also legitimate to use native methods to use native libraries when no equivalent libraries are available in Java.
+
+- It is rarely advisable to use native methods for improved performance. In early releases (prior to Java 3), it was often necessary, but JVMs have gotten much faster since then. For most tasks, it is now possible to obtain comparable performance in Java.
+
+- Use of native languages come with disadvantages:
+	- they aren't easily portable
+	- are not safe (i.e. susceptible to memory corruption errors)
+	- harder to debug
+	- require tedious glue code (JNI)
 
 Think twice before using native methods. Rarely, if ever, use them for improved performance. If you must use native methods to access low-level resources or legacy libraries, use as little native code as possible and test it thoroughly. A single bug in the native code can corrupt your entire application.
 
 ## Item 67: Optimize judiciously
 
-Do not strive to write fast programs—strive to write good ones; speed will follow. Do think about performance issues while you’re designing systems and especially while you’re designing APIs, wire-level protocols, and persistent data formats. When you’ve finished building the system, measure its performance. If it’s fast enough, you’re done. If not, locate the source of the problems with the aid of a profiler, and go to work optimizing the relevant parts of the system. The first step is to examine your choice of algorithms: no amount of low-level optimization can make up for a poor choice of algorithm. Repeat this process as necessary, measuring the performance after every change, until you’re satisfied.
+More computing sins are committed in the name of efficiency (without necessarily achieving it) than for any other single reason—including blind stupidity.
+—William A. Wulf [Wulf72]
+
+We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil.
+—Donald E. Knuth [Knuth74]
+
+We follow two rules in the matter of optimization:
+	Rule 1. Don’t do it.
+	Rule 2 (for experts only). __Don’t do it yet—that is, not until you have a perfectly clear and unoptimized solution__.
+—M. A. Jackson [Jackson75]
+
+Basically it is easy to do more harm than good, especially if you optimize prematurely. In the process, you may produce software that is neither fast nor correct and cannot easily be fixed.
+
+- Strive to write good programs rather than fast ones. If a good program is not fast enough, its architecture will allow it to be optimized. Good programs embody the principle of information hiding: where possible, they localize design decisions within individual components, so individual decisions can be changed without affecting the remainder of the system (Item 15).
+
+- Strive to avoid design decisions that limit performance. The components of a design that are most difficult to change after the fact are those specifying interactions between components and with the outside world. Chief among these design components are APIs, wire-level protocols, and persistent data formats. Not only are these design components difficult or impossible to change after the fact, but all of them can place significant limitations on the performance that a system can ever achieve.
+
+- Measure performance before and after each attempted optimization. You may be surprised by what you find. Often, attempted optimizations have no measurable effect on performance; sometimes, they make it worse. The main reason is that it’s difficult to guess where your program is spending its time. The part of the program that you think is slow may not be at fault, in which case you’d be wasting your time trying to optimize it. Common wisdom says that programs spend 90 percent of their time in 10 percent of their code.
+	- __Profiling tools can help you decide where to focus your optimization efforts. These tools give you runtime information, such as roughly how much time each method is consuming and how many times it is invoked__. In addition to focusing your tuning efforts, this can alert you to the need for algorithmic changes. If a quadratic (or worse) algorithm lurks inside your program, no amount of tuning will fix the problem. You must replace the algorithm with one that is more efficient. The more code in the system, the more important it is to use a profiler. It’s like looking for a needle in a haystack: the bigger the haystack, the more useful it is to have a metal detector. __Another tool that deserves special mention is jmh, which is not a profiler but a microbenchmarking framework that provides unparalleled visibility into the detailed performance of Java code__.
+
+Do not strive to write fast programs — strive to write good ones; speed will follow. But do think about performance while you’re designing systems, especially while you’re designing APIs, wire-level protocols, and persistent data formats. When you’ve finished building the system, measure its performance. If it’s fast enough, you’re done. If not, locate the source of the problem with the aid of a profiler and go to work optimizing the relevant parts of the system. The first step is to examine your choice of algorithms: no amount of low-level optimization can make up for a poor choice of algorithm. Repeat this process as necessary, measuring the performance after every change, until you’re satisfied.
 
 ## Item 68: Adhere to generally accepted naming conventions
 
-Internalize the standard naming conventions and learn to use them as second nature.
+- Package and module names should be hierarchical with the components separated by periods. Components should consist of lowercase alphabetic characters and, rarely, digits. The name of any package that will be used outside your organization should begin with your organization’s Internet domain name with the components reversed, for example, `edu.cmu`, `com.google`, `org.eff`. The standard libraries and optional packages, whose names begin with `java` and `javax`, are exceptions to this rule. __Users must not create packages or modules whose names begin with java or javax__.
+	- The remainder of a package name should consist of one or more components describing the package. Components should be short, generally eight or fewer characters. Meaningful abbreviations are encouraged, for example, `util` rather than `utilities`. Acronyms are acceptable, for example, `awt`. Components should generally consist of a single word or abbreviation.
+
+- Class and interface names, including enum and annotation type names, should consist of one or more words, with the first letter of each word capitalized, for example, `List` or `FutureTask`. Abbreviations are to be avoided, except for acronyms and certain common abbreviations like `max` and `min`. 
+	- Capitalize only the first letter in abbreviations (e.g. `HttpUrl` vs `HTTPURL`)
+
+- Constant field names should consists of uppercase words sepearted by underscores, the only recommended use of underscores.
+
+- Input parameters shoudl be named very carefully because their names are an integral part of their method's documentation.
+
+- Type parameter names usually consist of a single letter. Most commonly it is one of these five: `T` for an arbitrary type, `E` for the element type of a collection, `K` and `V` for the key and value types of a map, and `X` for an exception. The return type of a function is usually `R`. A sequence of arbitrary types can be `T`, `U`, `V` or `T1`, `T2`, `T3`.
+
+Reference for typographical conventions:
+| Identifier Type    | Examples |
+|--------------------|----------|
+| Package or module  | `org.junit.jupiter.api, com.google.common.collect` |
+| Class or Interface | `Stream, FutureTask, LinkedHashMap, HttpClient`|
+| Method or Field    | `remove, groupingBy, getCrc` |
+| Constant Field     | `MIN_VALUE, NEGATIVE_INFINITY` |
+| Local Variable     | `i, denom, houseNum` |
+| Type Parameter     | `T, E, K, V, X, R, U, V, T1, T2` |
+
+Instance methods that convert the type of an object, returning an independent object of a different type, are often called `to`*Type*, for example, `toString` or `toArray`. Methods that return a view (Item 6) whose type differs from that of the receiving object are often called `as`*Type*, for example, `asList`. Methods that return a primitive with the same value as the object on which they’re invoked are often called *type*`Value`, for example, `intValue`. Common names for static factories include `from`, `of`, `valueOf`, `instance`, `getInstance`, `newInstance`, `getType`, and `newType` (Item 1, page 9).
