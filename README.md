@@ -107,10 +107,10 @@ My notes on Effective Java, Third Edition
 
 ## [Chapter 11: Concurrency](chapter-11.md)
 
-- [Item 78: Synchronize access to shared mutable data](chapter-10.md#item-69-use-exceptions-only-for-exceptional-conditions)
-- [Item 79: Avoid excessive synchronization](chapter-10.md#item-70-use-checked-exceptions-for-recoverable-conditions-and-runtime-exceptions-for-programming-errors)
-- [Item 80: Prefer executors and tasks to threads](chapter-10.md#item-70-use-checked-exceptions-for-recoverable-conditions-and-runtime-exceptions-for-programming-errors)
-- [Item 81: Prefer concurrency utilities to wait and notify](chapter-10.md#item-71-avoid-unnecessary-use-of-checked-exceptions)
-- [Item 82: Document thread safety](chapter-10.md#item-72-favor-the-use-of-standard-exceptions)
-- [Item 83: Use lazy initialization judiciously](chapter-10.md#item-73-throw-exceptions-appropriate-to-the-abstraction)
-- [Item 84: Don’t depend on the thread scheduler](chapter-10.md#item-74-document-all-exceptions-thrown-by-each-method)
+- [Item 78: Synchronize access to shared mutable data](chapter-11.md#item-78-synchronize-access-to-shared-mutable-data)
+- [Item 79: Avoid excessive synchronization](chapter-11.md#item-79-avoid-excessive-synchronization)
+- [Item 80: Prefer executors and tasks to threads](chapter-11.md#item-80-prefer-executors-and-tasks-to-threads)
+- [Item 81: Prefer concurrency utilities to wait and notify](chapter-11.md#item-81-prefer-concurrency-utilities-to-wait-and-notify)
+- [Item 82: Document thread safety](chapter-11.md#item-82-document-thread-safety)
+- [Item 83: Use lazy initialization judiciously](chapter-11.md#item-83-use-lazy-initialization-judiciously)
+- [Item 84: Don’t depend on the thread scheduler](chapter-11.md#item-84-dont-depend-on-the-thread-scheduler)
