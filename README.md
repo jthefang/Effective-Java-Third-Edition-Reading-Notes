@@ -93,7 +93,7 @@ My notes on Effective Java, Third Edition
 - [Item 67: Optimize judiciously](chapter-09.md#item-67-optimize-judiciously)
 - [Item 68: Adhere to generally accepted naming convetions](chapter-09.md#item-68-adhere-to-generally-accepted-naming-conventions)
 
-## [Chapter 10: General Programming](chapter-10.md)
+## [Chapter 10: Exceptions](chapter-10.md)
 
 - [Item 69: Use exceptions only for exceptional conditions](chapter-10.md#item-69-use-exceptions-only-for-exceptional-conditions)
 - [Item 70: Use checked exceptions for recoverable conditions and runtime exceptions for programming errors](chapter-10.md#item-70-use-checked-exceptions-for-recoverable-conditions-and-runtime-exceptions-for-programming-errors)
@@ -104,3 +104,13 @@ My notes on Effective Java, Third Edition
 - [Item 75: Include failure-capture information in detail messages](chapter-10.md#item-75-include-failure-capture-information-in-detail-messages)
 - [Item 76: Strive for failure atomicity](chapter-10.md#item-76-strive-for-failure-atomicity)
 - [Item 77: Don’t ignore exceptions](chapter-10.md#item-77-dont-ignore-exceptions)
+
+## [Chapter 11: Concurrency](chapter-11.md)
+
+- [Item 78: Synchronize access to shared mutable data](chapter-10.md#item-69-use-exceptions-only-for-exceptional-conditions)
+- [Item 79: Avoid excessive synchronization](chapter-10.md#item-70-use-checked-exceptions-for-recoverable-conditions-and-runtime-exceptions-for-programming-errors)
+- [Item 80: Prefer executors and tasks to threads](chapter-10.md#item-70-use-checked-exceptions-for-recoverable-conditions-and-runtime-exceptions-for-programming-errors)
+- [Item 81: Prefer concurrency utilities to wait and notify](chapter-10.md#item-71-avoid-unnecessary-use-of-checked-exceptions)
+- [Item 82: Document thread safety](chapter-10.md#item-72-favor-the-use-of-standard-exceptions)
+- [Item 83: Use lazy initialization judiciously](chapter-10.md#item-73-throw-exceptions-appropriate-to-the-abstraction)
+- [Item 84: Don’t depend on the thread scheduler](chapter-10.md#item-74-document-all-exceptions-thrown-by-each-method)
