@@ -117,9 +117,9 @@ My notes on Effective Java, Third Edition
 
 ## [Chapter 12: Concurrency](chapter-12.md)
 
-- [Item 85: Prefer alternatives to Java serialization](chapter-11.md#item-78-synchronize-access-to-shared-mutable-data)
-- [Item 86: Implement `Serializable` with great caution](chapter-11.md#item-79-avoid-excessive-synchronization)
-- [Item 87: Consider using a custom serialized form](chapter-11.md#item-80-prefer-executors-and-tasks-to-threads)
-- [Item 88: Write readObject methods defensively](chapter-11.md#item-81-prefer-concurrency-utilities-to-wait-and-notify)
-- [Item 89: For instance control, prefer enum types to readResolve](chapter-11.md#item-82-document-thread-safety)
-- [Item 90: Consider serialization proxies instead of serialized instances](chapter-11.md#item-83-use-lazy-initialization-judiciously)
+- [Item 85: Prefer alternatives to Java serialization](chapter-12.md#item-85-prefer-alternatives-to-java-serialization)
+- [Item 86: Implement `Serializable` with great caution](chapter-12.md#item-86-implement-serializable-with-great-caution)
+- [Item 87: Consider using a custom serialized form](chapter-12.md#item-87-consider-using-a-custom-serialized-form)
+- [Item 88: Write readObject methods defensively](chapter-12.md#item-88-write-readobject-methods-defensively)
+- [Item 89: For instance control, prefer enum types to readResolve](chapter-12.md#item-89-for-instance-control-prefer-enum-types-to-readresolve)
+- [Item 90: Consider serialization proxies instead of serialized instances](chapter-12.md#item-90-consider-serialization-proxies-instead-of-serialized-instances)
