@@ -114,3 +114,12 @@ My notes on Effective Java, Third Edition
 - [Item 82: Document thread safety](chapter-11.md#item-82-document-thread-safety)
 - [Item 83: Use lazy initialization judiciously](chapter-11.md#item-83-use-lazy-initialization-judiciously)
 - [Item 84: Don’t depend on the thread scheduler](chapter-11.md#item-84-dont-depend-on-the-thread-scheduler)
+
+## [Chapter 12: Concurrency](chapter-12.md)
+
+- [Item 85: Prefer alternatives to Java serialization](chapter-11.md#item-78-synchronize-access-to-shared-mutable-data)
+- [Item 86: Implement `Serializable` with great caution](chapter-11.md#item-79-avoid-excessive-synchronization)
+- [Item 87: Consider using a custom serialized form](chapter-11.md#item-80-prefer-executors-and-tasks-to-threads)
+- [Item 88: Write readObject methods defensively](chapter-11.md#item-81-prefer-concurrency-utilities-to-wait-and-notify)
+- [Item 89: For instance control, prefer enum types to readResolve](chapter-11.md#item-82-document-thread-safety)
+- [Item 90: Consider serialization proxies instead of serialized instances](chapter-11.md#item-83-use-lazy-initialization-judiciously)
