@@ -168,3 +168,4 @@
 		- Distressed properties become increasingly difficult to find in boom markets. In other words, the strategy is __market dependent__.
 	- Ugly
 		- This type of investing can degenerate and become predatory when done by the wrong people, and in the wrong ways.
+		
