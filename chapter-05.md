@@ -47,31 +47,19 @@ Using raw types can lead to exceptions at runtime, so don’t use them in new co
 For quick reference, the terms introduced in this item (and a few introduced later in this chapter) are summarized in 
 the following table:
 
-!===================================================================================!
-Term                                Example                         Item
-
-Parameterized type                  List<String>                    Item 26
-
-Actual type parameter               String                          Item 26
-
-Generic type                        List<E>                         Items 26, 29
-
-Formal type parameter               E                               Item 26
-
-Unbounded wildcard type             List<?>                         Item 26
-
-Raw type                            List                            Item 26
-
-Bounded type parameter              <E extends Number>              Item 29
-
-Recursive type bound                <T extends Comparable<T>>       Item 30
-
-Bounded wildcard type               List<? extends Number>          Item 31
-
-Generic method                      static <E> List<E> asList(E[] a)Item 30
-
-Type token                          String.class                    Item 33
-!===================================================================================!
+| Term                    | Example                            |     Items    |
+|-------------------------|------------------------------------|--------------|
+| Parameterized type      | `List<String>`                     | Item 26      |
+| Actual type parameter   | `String`                           | Item 26      |
+| Generic type            | `List<E>`                          | Items 26, 29 |
+| Formal type parameter   | `E`                                | Item 26      |
+| Unbounded wildcard type | `List<?>`                          | Item 26      |
+| Raw type                | `List`                             | Item 26      |
+| Bounded type parameter  | `<E extends Number>`               | Item 29      |
+| Recursive type bound    | `<T extends Comparable<T>>`        | Item 30      |
+| Bounded wildcard type   | `List<? extends Number>`           | Item 31      |
+| Generic method          | `static <E> List<E> asList(E[] a)` | Item 30      |
+| Type token              | `String.class`                     | Item 33      |
 
 ## Item 27: Eliminate unchecked warnings
 
